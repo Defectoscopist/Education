@@ -17,36 +17,52 @@
 
 ---
 
-## Этап 0: Фундамент (2-3 недели)
+## Этап 0: Фундамент (3-4 недели)
 
 > Цель: Научиться писать код, который не ломается, и понимать, как работает бэкенд в принципе.
 
-### 0.1 — TypeScript (основы)
+### 0.1 — TypeScript: типы, функции, сигнатуры ✅
 - Типы: `type`, `interface`, `union`, `intersection`
-- Дженерики: `T`, `K extends keyof T`, utility types (`Pick`, `Omit`, `Partial`)
-- Async/await, промисы, `Promise.all`
-- Работа с массивами: `map`, `filter`, `reduce`, `sort`, `find`
-- Модули: import/export
-- `strict mode`, `noImplicitAny`
+- Опциональные поля `?`
+- Функции, return types, сигнатуры
+- strict mode, noImplicitAny
 
-**Практика:** Написать 5-10 pure-функций для обработки корзины товаров (расчет суммы, фильтрация по категории, сортировка по цене)
+**Практика:** `practice/typescript/01-basics.ts` — Product, CartItem, Order, calculateCartTotal, filterAvailableProducts, getProductsByCategory, sortProductsByPrice, fetchProduct, fetchMultipleProducts
 
-### 0.2 — Git
+### 0.2 — TypeScript: массивы (map, filter, reduce, sort, find)
+- Что такое callback (колбэк)
+- `.map()` — преобразование каждого элемента
+- `.filter()` — фильтрация по условию
+- `.reduce()` — свёртка массива в одно значение (сумма, группировка)
+- `.sort()` — сортировка (почему нужна функция сравнения)
+- `.find()` — поиск первого подходящего
+- `[...array]` — копирование перед сортировкой
+- Цепочки методов: `.filter().sort().map()`
+
+**Практика:** `practice/typescript/02-arrays.ts` — 7 заданий на каждый метод + комбинации
+
+### 0.3 — TypeScript: асинхронность (Promise, async/await, setTimeout)
+- Синхронный vs асинхронный код
+- Что такое Promise и его 3 состояния
+- `.then()` и `async/await`
+- `setTimeout` и обёртка в Promise
+- Обработка ошибок: `try/catch`, `throw`
+- `Promise.all()` — параллельные запросы
+- `Promise.race()` — таймауты
+- Последовательные vs параллельные запросы (сравнение скорости)
+
+**Практика:** `practice/typescript/03-async.ts` — 7 заданий: delay, findProductById, findMultipleProducts, sequential vs parallel, safeFindProduct, findProductWithTimeout, processOrder
+
+### 0.4 — Git
 - `init`, `clone`, `add`, `commit`, `push`, `pull`
 - `branch`, `checkout -b`, `merge`
 - `rebase` (основы), разрешение merge conflicts
 - `.gitignore`, `README`
+- Осмысленные commit message
 
-**Практика:** Ведение всего проекта в Git с осмысленными commit message
+**Практика:** Ведение всего проекта в Git с первого дня
 
-### 0.3 — Как работает бэкенд (теория)
-- Клиент-серверная архитектура
-- HTTP: методы (GET, POST, PUT, DELETE), статусы (200, 201, 400, 401, 404, 500)
-- REST vs RPC (tRPC — это RPC)
-- Что такое API? Request → обработка → Response
-- Middleware — что это и зачем
-
-### 0.4 — PostgreSQL (основы)
+### 0.5 — PostgreSQL (SQL)
 - Подключение через `psql` или DBeaver
 - `CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`
 - `WHERE`, `ORDER BY`, `LIMIT`, `OFFSET`
@@ -56,6 +72,13 @@
 - Транзакции: `BEGIN`, `COMMIT`, `ROLLBACK`
 
 **Практика:** Спроектировать первые 2 таблицы (User, Product) вручную через SQL, написать 10 запросов
+
+### 0.6 — Как работает бэкенд (теория)
+- Клиент-серверная архитектура
+- HTTP: методы (GET, POST, PUT, DELETE), статусы (200, 201, 400, 401, 404, 500)
+- REST vs RPC (tRPC — это RPC)
+- Что такое API? Request → обработка → Response
+- Middleware — что это и зачем
 
 ---
 
@@ -227,7 +250,8 @@
 ## 📅 Roadmap (визуально)
 
 ```
-Недели  1-3:  ████████░░░░░░░░░░░░  Фундамент (TS, Git, SQL, HTTP)
+Недели  1-2:  ████████░░░░░░░░░░░░  TypeScript (типы, функции, массивы — идёт сейчас)
+Недели  2-4:  ████████░░░░░░░░░░░░  Асинхронность + Git + SQL + HTTP
 Недели  4-9:  ████████████████░░░░  Backend Core (Prisma, tRPC, Auth)
 Недели 10-12: ████████░░░░░░░░░░░░  Docker & Infra
 Недели 13-20: ████████████████████  E-commerce Domain
@@ -236,16 +260,12 @@
 
 ---
 
-## ✅ Что нужно сделать прямо сейчас (твой первый шаг)
-1. На все вопросы нет.
-2. Рамок временных нет - просто давай задания, буду тратить часа 4 в день, до уровня middle
-3. Наверно лучше все в одном проекте держать.
-1. **Toggle to Act Mode** (переключить режим внизу)
-2. Я начну с **Этапа 0.1** — мы разберем базовый TypeScript, напишем функции для e-commerce (расчет корзины, фильтрация), и сразу внедрим Git
-3. Каждый день ты получаешь задачу, делаешь ее, я проверяю код и даю следующую
+## Твой следующий шаг
 
+Открой `practice/typescript/02-arrays.ts` в редакторе и реши 7 заданий (весь файл — сплошная практика с теорией наверху). Когда закончишь — раскомментируй тесты внизу файла и запусти:
 
----
-Мне надо было как-то использовать (items: CartItem[]) => number в 3 задании? Что такое сигнатура?
-Почему TypeScript пропустил мои return, если я не делал проверки на null или undefined?
-Я не понял, куда нужно было использовать .map()
+```bash
+npx tsx practice/typescript/02-arrays.ts
+```
+
+Если всё работает — переходи к `practice/typescript/03-async.ts`.

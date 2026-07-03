@@ -3,11 +3,6 @@
 // Контекст: E-commerce (корзина, товары, скидки)
 // ============================================================
 
-import { createURL } from "@trpc/server/adapters/node-http";
-import { reduceAppConfig } from "next/dist/build/utils";
-import { acceptLanguage } from "next/dist/server/accept-header";
-import { number } from "zod/v4";
-
 // ------------------- 1. Базовые типы -----------------------
 
 /**
@@ -35,7 +30,7 @@ type Product = {
 // но не мог быть меньше 1
 type CartItem = {
   product: Product;
-  quantity?: number; // TODO: сделать так, чтобы quantity был > 0
+  quantity: number; // TODO: сделать так, чтобы quantity был > 0
 };
 
 // ------------------- 2. Union и Literal типы -------------------
@@ -71,7 +66,7 @@ type Order = {
 
 
 function calculateCartTotal (items: CartItem[]) : number {
-    return items.reduce((acc, curr) => acc + curr.product.price, 0)
+    return items.reduce((acc, curr) => acc + curr.product.price * curr.quantity, 0)
 }
 
 /**
@@ -94,9 +89,9 @@ function filterAvailableProducts(products: Product[]): Product[] {
  */
 function getProductsByCategory(products: Product[], categoryId?: number): Product[] {
   
-  if (!categoryId) return products
+  if (categoryId === undefined) return products
 
-  return products.filter(product => product.categoryID)
+  return products.filter(product => product.categoryID === categoryId)
 }
 
 /**
@@ -108,10 +103,9 @@ function getProductsByCategory(products: Product[], categoryId?: number): Produc
  */
 function sortProductsByPrice(products: Product[], direction: "asc" | "desc"): Product[] {
     if (direction == "asc") {
-        return products.sort((a, b) => a.price - b.price)
+        return [...products].sort((a, b) => a.price - b.price)
     }
-
-    return products.sort((a, b) => b.price - a.price)
+    return [...products].sort((a, b) => b.price - a.price)
 }
 
 // ------------------- 4. Async/Await -------------------------
@@ -124,13 +118,37 @@ function sortProductsByPrice(products: Product[], direction: "asc" | "desc"): Pr
  * 
  * Если id <= 0 — выбросить ошибку "Invalid product ID"
  */
+
+    // id: number
+    // name: string
+    // price: number
+    // inStock: boolean
+    // categoryID?: number
+    // createdAt: Date
+    // deletedAt?: Date
+
 async function fetchProduct(id: number): Promise<Product> {
   // TODO: реализовать имитацию:
   // 1. Проверить что id > 0, иначе throw new Error("Invalid product id")
   // 2. Создать fakeProduct с переданным id
   // 3. Обернуть в setTimeout (используй new Promise)
   // 4. Вернуть Product
-  throw new Error("Not implemented");
+  if (id <= 0) throw new Error("Not implemented");
+
+  const fakeProduct: Product = {
+    id,
+    name: "testname" + id,
+    price: 5000,
+    inStock: true,
+    createdAt: new Date()
+  }
+  const result = await new Promise<Product>((resolve) => {
+    setTimeout(() => {
+      resolve(fakeProduct)
+    }, 1000)
+  })
+
+  return result
 }
 
 /**
@@ -142,7 +160,9 @@ async function fetchProduct(id: number): Promise<Product> {
  */
 async function fetchMultipleProducts(ids: number[]): Promise<Product[]> {
   // TODO: реализовать через Promise.all
-  return [];
+
+  const promises = ids.map(id => fetchProduct(id))
+  return Promise.all(promises)
 }
 
 // ============================================================
